@@ -1,26 +1,31 @@
-%h1 Instant Hub
-%h2 Because i love everything about github except search
-
 = form_tag '/search/index', :method => :post do
   = text_field_tag :terms, @original_terms
   = submit_tag :search
   %br
   %p
-    w:6 => only show repos with 6 or more watchers
-  %p
-    f:2 => only show repos with 2 or more forks
-  %p= @options.inspect
+    w:6 => show repos w/6 or more watchers
+    |
+    f:2 => show repos w/2 or more forks
 
-%h3 Repositories
-
-- @repositories && @repositories.each do |repo|
-  %div
-    %span= repo["name"]
-    (
-    %span= repo["url"]
-    )
-    %span
-      Last pushed:
-      = repo["pushed_at"]
-    %div= repo.inspect
-  %br
+#results
+  - @repositories && @repositories.each do |repo|
+    %div
+      .name= repo["name"]
+      .author
+        by:
+        %a{ :href => "https://github.com/#{repo["owner"]}" }
+          = repo["owner"]
+      .urls
+        %a{ :href => repo["url"] } Github
+        - unless repo["homepage"].blank?
+          %a{ :href => repo["homepage"] } Home Page
+      .description= repo["description"]
+      .details
+        %p
+          Last updated:
+          = Date.parse(repo["pushed_at"]).to_s
+          | Watchers:
+          = repo["watchers"]
+          | Forks:
+          = repo["forks"]
+    %br
