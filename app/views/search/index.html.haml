@@ -17,9 +17,8 @@
         by:
         %a{ :href => "https://github.com/#{repo["owner"]}" }
           = repo["owner"]
-      .urls
-        %a{ :href => repo["url"] } Github
-        - unless repo["homepage"].blank?
+      - unless repo["homepage"].blank?
+        .urls
           %a{ :href => repo["homepage"] } Home Page
       .description= repo["description"]
       .details
