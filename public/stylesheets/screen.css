@@ -3,5 +3,4 @@ h1 { font:60px 'Droid Sans', arial, serif; }
 body,p,* { font:16px 'Droid Sans', arial, serif; }
 input,button { font-size: 46px; }
 
-.name { font-size: 24px; font-weight: bold; }
-.debug { font-size: 10px !important; }
+.name a { font-size: 24px; font-weight: bold; }

@@ -10,7 +10,9 @@
 #results
   - @repositories && @repositories.each do |repo|
     %div
-      .name= repo["name"]
+      .name
+        %a{ :href => repo["url"] }
+          = repo["name"]
       .author
         by:
         %a{ :href => "https://github.com/#{repo["owner"]}" }
