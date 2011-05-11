@@ -1,0 +1,26 @@
+%h1 Instant Hub
+%h2 Because i love everything about github except search
+
+= form_tag '/search/index', :method => :post do
+  = text_field_tag :terms, @original_terms
+  = submit_tag :search
+  %br
+  %p
+    w:6 => only show repos with 6 or more watchers
+  %p
+    f:2 => only show repos with 2 or more forks
+  %p= @options.inspect
+
+%h3 Repositories
+
+- @repositories && @repositories.each do |repo|
+  %div
+    %span= repo["name"]
+    (
+    %span= repo["url"]
+    )
+    %span
+      Last pushed:
+      = repo["pushed_at"]
+    %div= repo.inspect
+  %br
