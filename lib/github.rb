@@ -4,7 +4,7 @@ class Github
 
   class << self
     def repositories(terms, options = {})
-      dc = Dalli::Client.new('localhost:11211')
+      dc = Dalli::Client.new
       options = {
         :watchers  => 6,
         :forks     => 2,
