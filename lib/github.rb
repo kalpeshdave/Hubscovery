@@ -21,31 +21,33 @@ class Github
         end
         all_results << cached
       end
-      result_counts = Hash.new {0}
-      all_results.flatten.each { |h| result_counts[h["name"]] += 1 }
-      intersected = result_counts.select! { |r| result_counts[r] == all_results.count }.keys
-      results = all_results.flatten.select! { |h| intersected.include? h["name"] }.uniq { |h| h["name"] }
-      if results
-        results = if options[:watchers] >= 0
-                    results.select { |r| r["watchers"] >= options[:watchers] }
-                  else
-                    results.select { |r| r["watchers"] <= options[:watchers] }
-                  end
-      end
-      if results
-        results = if options[:forks] >= 0
-                    results.select { |r| r["forks"] >= options[:forks] }
-                  else
-                    results.select { |r| r["forks"] <= options[:forks] }
-                  end
-      end
-      if results
-        results = if options[:pushed_at] >= 0
-                    results.select { |r| DateTime.parse(r["pushed_at"]) >= options[:pushed_at].weeks.ago }
-                  else
-                    results.select { |r| DateTime.parse(r["pushed_at"]) <= options[:pushed_at].weeks.ago }
-                  end
-        results.sort { |a,b| b[options[:sort].to_s] <=> a[options[:sort].to_s] }
+      if all_results.flatten.count > 0
+        result_counts = Hash.new {0}
+        all_results.flatten.each { |h| result_counts[h["name"]] += 1 }
+        intersected = result_counts.select! { |r| result_counts[r] == all_results.count }.keys
+        results = all_results.flatten.select! { |h| intersected.include? h["name"] }.uniq { |h| h["name"] }
+        if results
+          results = if options[:watchers] >= 0
+                      results.select { |r| r["watchers"] >= options[:watchers] }
+                    else
+                      results.select { |r| r["watchers"] <= options[:watchers] }
+                    end
+        end
+        if results
+          results = if options[:forks] >= 0
+                      results.select { |r| r["forks"] >= options[:forks] }
+                    else
+                      results.select { |r| r["forks"] <= options[:forks] }
+                    end
+        end
+        if results
+          results = if options[:pushed_at] >= 0
+                      results.select { |r| DateTime.parse(r["pushed_at"]) >= options[:pushed_at].weeks.ago }
+                    else
+                      results.select { |r| DateTime.parse(r["pushed_at"]) <= options[:pushed_at].weeks.ago }
+                    end
+        end
+        results.sort { |a,b| b[options[:sort].to_s] <=> a[options[:sort].to_s] } if results
       end
     end
   end
