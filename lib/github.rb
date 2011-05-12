@@ -45,7 +45,8 @@ class Github
         cached = dc.get(term)
         unless cached
           repo_url = "/repos/search/#{term}"
-          cached = get(repo_url).parsed_response["repositories"]
+          raw = get(repo_url)
+          cached = raw.parsed_response["repositories"]
           dc.set(term, cached)
         end
         all_results << cached
@@ -81,9 +82,7 @@ class Github
       end
 
       if results
-        results = if options[:language]
-                    results.select { |r| r["language"] == LANGUAGES[options[:language]] }
-                  end
+        results = results.select { |r| r["language"] == LANGUAGES[options[:language]] } if options[:language]
       end
 
       if results
@@ -93,6 +92,7 @@ class Github
                     results.select { |r| DateTime.parse(r["pushed_at"]) <= options[:pushed_at].weeks.ago }
                   end
       end
+
       results.sort { |a,b| b[options[:sort].to_s] <=> a[options[:sort].to_s] } if results
     end
   end
