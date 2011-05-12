@@ -8,7 +8,8 @@ class Github
       options = {
         :watchers  => 6,
         :forks     => 2,
-        :pushed_at => 4
+        :pushed_at => 4,
+        :sort => :score
       }.merge!(options)
       all_results = []
       terms.split(/\s+/).each do |term|
@@ -44,7 +45,7 @@ class Github
                   else
                     results.select { |r| DateTime.parse(r["pushed_at"]) <= options[:pushed_at].weeks.ago }
                   end
-        results.sort { |a,b| b["score"] <=> a["score"] }
+        results.sort { |a,b| b[options[:sort].to_s] <=> a[options[:sort].to_s] }
       end
     end
   end

@@ -1,4 +1,5 @@
 h1 { font:60px 'Droid Sans', arial, serif; }
+h1,h2,h3,h4,h5,h6 { font-weight: bold; }
 
 body,p,* { font:16px 'Droid Sans', arial, serif; }
 input,button { font-size: 46px; }

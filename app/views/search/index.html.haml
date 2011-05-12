@@ -4,13 +4,6 @@
   = text_field_tag :terms, @original_terms
   = submit_tag :search
   %br
-  %p
-    w:6 => has 6 or more watchers
-    |
-    f:2 => has 2 or more forks
-    %br
-    p:4 => was pushed to within 4 weeks
-    (these are the defaults)
 
 #results
   - @repositories && @repositories.each do |repo|
@@ -35,3 +28,18 @@
           | Forks:
           = repo["forks"]
     %br
+
+- content_for :sidebar do
+  %h4 Options
+  %ul
+    %li w:# (watchers:minimum) ex. w:6 => has 6 or more watchers
+    %li f:# (forks:minimum) ex. f:2 => has 2 or more forks
+    %li p:# (pushed_at:within_weeks.ago) ex. p:4 => was pushed to within 4 weeks
+    %li s:choice (sorted by "choice") ex. s:pushed_at => sort by "pushed_at" choices (pushed_at, score, watchers, forks)
+  %h4 Defaults
+  %pre
+    w:6 f:2 p:4 s:score
+  %ul
+    %li minimum of 6 watchers and 2 forks
+    %li pushed to in last 4 weeks
+    %li sorted by "score" (think lucene/sphinx/etc)
