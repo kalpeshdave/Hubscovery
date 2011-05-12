@@ -7,6 +7,7 @@ gem "haml", ">= 3.0.0"
 gem "haml-rails"
 gem "jquery-rails"
 gem "httparty"
+gem "dalli"
 
 group :development do
   gem 'unicorn'

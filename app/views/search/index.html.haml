@@ -1,4 +1,6 @@
 = form_tag '/search/index', :method => :post do
+  = label_tag :terms, "github repository search"
+  %br
   = text_field_tag :terms, @original_terms
   = submit_tag :search
   %br
