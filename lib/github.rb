@@ -2,6 +2,32 @@ class Github
   include HTTParty
   base_uri 'https://github.com/api/v2/json'
 
+  LANGUAGES = {
+    "as3" => "ActionScript",
+    "c" => "C",
+    "csharp" => "C#",
+    "cpp" => "C++",
+    "css" => "CSS",
+    "common-lisp" => "Common Lisp",
+    "diff" => "Diff",
+    "erlang" => "Erlang",
+    "html" => "HTML",
+    "haskell" => "Haskell",
+    "java" => "Java",
+    "javascript" => "JavaScript",
+    "lua" => "Lua",
+    "objective-c" => "Objective-C",
+    "php" => "PHP",
+    "perl" => "Perl",
+    "python" => "Python",
+    "ruby" => "Ruby",
+    "sql" => "SQL",
+    "scala" => "Scala",
+    "scheme" => "Scheme",
+    "tex" => "TeX",
+    "xml" => "XML"
+  }
+
   class << self
     def repositories(terms, options = {})
       dc = Dalli::Client.new
@@ -45,6 +71,7 @@ class Github
                     results.select { |r| r["watchers"] <= options[:watchers] }
                   end
       end
+
       if results
         results = if options[:forks] >= 0
                     results.select { |r| r["forks"] >= options[:forks] }
@@ -52,14 +79,21 @@ class Github
                     results.select { |r| r["forks"] <= options[:forks] }
                   end
       end
+
+      if results
+        results = if options[:language]
+                    results.select { |r| r["language"] == LANGUAGES[options[:language].to_s] }
+                  end
+      end
+
       if results
         results = if options[:pushed_at] >= 0
                     results.select { |r| DateTime.parse(r["pushed_at"]) >= options[:pushed_at].weeks.ago }
                   else
                     results.select { |r| DateTime.parse(r["pushed_at"]) <= options[:pushed_at].weeks.ago }
                   end
-        results.sort { |a,b| b[options[:sort].to_s] <=> a[options[:sort].to_s] } if results
       end
+      results.sort { |a,b| b[options[:sort].to_s] <=> a[options[:sort].to_s] } if results
     end
   end
 end
