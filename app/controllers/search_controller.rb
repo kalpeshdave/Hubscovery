@@ -31,7 +31,7 @@ class SearchController < ApplicationController
 
     if language_regexp.match(terms)
       term = language_regexp.match(terms)[1]
-      @options[:language] = term.to_sym if Github::LANGUAGES.keys.include? term
+      @options[:language] = term if Github::LANGUAGES.keys.include? term
       terms = terms.gsub(language_regexp, '')
     end
 

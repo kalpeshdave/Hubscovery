@@ -82,7 +82,7 @@ class Github
 
       if results
         results = if options[:language]
-                    results.select { |r| r["language"] == LANGUAGES[options[:language].to_s] }
+                    results.select { |r| r["language"] == LANGUAGES[options[:language]] }
                   end
       end
 
