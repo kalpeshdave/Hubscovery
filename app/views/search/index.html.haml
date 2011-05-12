@@ -6,11 +6,12 @@
   %br
 
 #results
-  - @repositories && @repositories.each do |repo|
-    %div
-      .name
-        %a{ :href => repo["url"] }
-          = repo["name"]
+  - if @repositories 
+    - @repositories.each do |repo|
+      %div
+        .name
+          %a{ :href => repo["url"] }
+            = repo["name"]
       .author
         by:
         %a{ :href => "https://github.com/#{repo["owner"]}" }
@@ -27,7 +28,13 @@
           = repo["watchers"]
           | Forks:
           = repo["forks"]
-    %br
+  - else
+    %p Search for something, like rspec
+    %p Hints:
+    %ul
+      %li doesn't work for user names
+      %li doesn't work without trying to find a repo (no bare w:3 type searches)
+  %br
 
 - content_for :sidebar do
   %h4 Options
