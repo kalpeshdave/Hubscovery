@@ -34,7 +34,7 @@ class Github
       options = {
         :watchers  => 6,
         :forks     => 2,
-        :pushed_at => 4,
+        :pushed_at => 26,
         :sort => :score
       }.merge!(options)
 
@@ -58,7 +58,7 @@ class Github
         if search_terms.count > 1
           result_counts = Hash.new {0}
           all_results.each { |h| result_counts[h["name"]] += 1 }
-          intersected = result_counts.select! { |r| result_counts[r] == all_results.count }.keys
+          intersected = result_counts.select! { |r| result_counts[r] == search_terms.count }.keys
           results = all_results.flatten.select! { |h| intersected.include? h["name"] }.uniq { |h| h["name"] }
         else
           results = all_results.flatten
