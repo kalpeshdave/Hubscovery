@@ -5,9 +5,12 @@
   = submit_tag :search
   %br
   %p
-    w:6 => show repos w/6 or more watchers
+    w:6 => has 6 or more watchers
     |
-    f:2 => show repos w/2 or more forks
+    f:2 => has 2 or more forks
+    %br
+    p:4 => was pushed to within 4 weeks
+    (these are the defaults)
 
 #results
   - @repositories && @repositories.each do |repo|
