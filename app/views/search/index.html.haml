@@ -22,7 +22,9 @@
       .description= repo["description"]
       .details
         %p
-          Last updated:
+          Language:
+          = repo["language"]
+          | Last updated:
           = Date.parse(repo["pushed_at"]).to_s
           | Watchers:
           = repo["watchers"]
