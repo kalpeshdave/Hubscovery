@@ -29,6 +29,15 @@ class Github
   }
 
   class << self
+    def filter(results, term, threshold)
+      threshold = threshold.to_i
+      if threshold > 0
+        results.select { |r| r[term] >= threshold }
+      else
+        results.select { |r| r[term] <= threshold }
+      end
+    end
+
     def repositories(terms, options = {})
       dc = Dalli::Client.new
       options = {
@@ -41,15 +50,17 @@ class Github
       all_results = []
       search_terms = terms.split(/\s+/)
 
-      search_terms.each do |term|
-        cached = dc.get(term)
-        unless cached
-          repo_url = "/repos/search/#{term}"
-          raw = get(repo_url)
-          cached = raw.parsed_response["repositories"]
-          dc.set(term, cached)
+      if search_terms
+        search_terms.each do |term|
+          cached = dc.get(term)
+          if !cached || options[:force]
+            repo_url = "/repos/search/#{term}"
+            raw = get(repo_url)
+            cached = raw.parsed_response["repositories"]
+            dc.set(term, cached)
+          end
+          all_results << cached
         end
-        all_results << cached
       end
 
       all_results.flatten!
@@ -66,19 +77,11 @@ class Github
       end
 
       if results
-        results = if options[:watchers] >= 0
-                    results.select { |r| r["watchers"] >= options[:watchers] }
-                  else
-                    results.select { |r| r["watchers"] <= options[:watchers] }
-                  end
+        results = filter(results, "watchers", options[:watchers])
       end
 
       if results
-        results = if options[:forks] >= 0
-                    results.select { |r| r["forks"] >= options[:forks] }
-                  else
-                    results.select { |r| r["forks"] <= options[:forks] }
-                  end
+        results = filter(results, "forks", options[:forks])
       end
 
       if results
@@ -86,10 +89,11 @@ class Github
       end
 
       if results
-        results = if options[:pushed_at] >= 0
-                    results.select { |r| DateTime.parse(r["pushed_at"]) >= options[:pushed_at].weeks.ago }
+        pushed_at = options[:pushed_at].to_i
+        results = if pushed_at >= 0
+                    results.select { |r| DateTime.parse(r["pushed_at"]) >= pushed_at.weeks.ago }
                   else
-                    results.select { |r| DateTime.parse(r["pushed_at"]) <= options[:pushed_at].weeks.ago }
+                    results.select { |r| DateTime.parse(r["pushed_at"]) <= pushed_at.weeks.ago }
                   end
       end
 
