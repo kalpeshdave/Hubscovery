@@ -50,6 +50,8 @@ class Github
       all_results = []
       search_terms = terms.split(/\s+/)
 
+      # rails cache.fetch with block is nicer here
+      # would have to figure out --force though
       if search_terms
         search_terms.each do |term|
           cached = dc.get(term)
@@ -57,7 +59,7 @@ class Github
             repo_url = "/repos/search/#{term}"
             raw = get(repo_url)
             cached = raw.parsed_response["repositories"]
-            dc.set(term, cached)
+            dc.set(term, cached) if cached
           end
           all_results << cached
         end
