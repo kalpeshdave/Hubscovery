@@ -1,0 +1,37 @@
+!!!
+%html
+  %head
+    %title Hubscovery
+    = stylesheet_link_tag :all
+    = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Droid+Sans'
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
+    :javascript
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-23300472-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+    %body
+      .row
+        .column.grid_12
+          %h1
+            =link_to 'Hubscovery', '/'
+      .row
+        .column.grid_8
+          = yield
+        .column.grid_4
+          = yield(:sidebar)
+        .row
+          .column.grid_12
+            %p
+              built by
+              %a{:href => "mailto:jschoolcraft@aissaclabs.com"} Jeff Schoolcraft
+              at
+              = succeed "," do
+                %a{:href => "http://thequeue.net"} The Queue Incorporated
+              \&copy; #{Date.today.year}
