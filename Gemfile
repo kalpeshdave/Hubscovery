@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.9'
 gem 'sqlite3'
 
 gem "haml", ">= 3.0.0"
@@ -15,6 +15,6 @@ group :development do
 end
 
 group :development, :test do
-  gem "capybara", :group => [:development, :test]
-  gem "rspec-rails", ">= 2.0.1", :group => [:development, :test]
+  gem "capybara"
+  gem "rspec-rails", ">= 2.0.1"
 end
