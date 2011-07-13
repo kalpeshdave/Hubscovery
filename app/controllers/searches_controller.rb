@@ -10,12 +10,16 @@ class SearchesController < ApplicationController
 
   def show
     @search = Search.find_by_permalink(params[:link])
-    @original_terms = @search.q
+    if @search
+      @original_terms = @search.q
 
-    query = @search.q
-    terms, @options = prepare_terms_and_options(query)
-    @repositories = Github.repositories(terms, @options) if query
-    render :template => "searches/new"
+      query = @search.q
+      terms, @options = prepare_terms_and_options(query)
+      @repositories = Github.repositories(terms, @options) if query
+      render :template => "searches/new"
+    else
+      redirect_to '/'
+    end
   end
 
   def create
