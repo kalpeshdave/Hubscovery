@@ -9,6 +9,7 @@ gem "haml-rails"
 gem "jquery-rails"
 gem "httparty"
 gem "dalli"
+gem "hoptoad_notifier"
 
 group :development do
   gem 'unicorn'
