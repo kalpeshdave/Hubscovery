@@ -1,0 +1,52 @@
+%form{:action => "/search"}
+  %label{:for => "q"}
+    github repository search
+    %input{:name => "q", :value => @original_terms }
+#results
+  - if @repositories
+    #permalink
+      - if @search && @search.permalink
+        permalink:
+        = link_to permalink_url(@search.permalink)
+      - else
+        = link_to 'create permalink', searches_path(:q => @original_terms), :method => :post, :action => :create
+    - @repositories.each do |repo|
+      %div
+        .name
+          %a{ :href => repo["url"] }
+            = repo["name"]
+      .author
+        by:
+        %a{ :href => "https://github.com/#{repo["owner"]}" }
+          = repo["owner"]
+      - unless repo["homepage"].blank?
+        .urls
+          %a{ :href => repo["homepage"] } Home Page
+      .description= repo["description"]
+      .details
+        %p
+          Language:
+          = repo["language"]
+          | Last updated:
+          = Date.parse(repo["pushed_at"]).to_s
+          | Watchers:
+          = repo["watchers"]
+          | Forks:
+          = repo["forks"]
+  - else
+    %p Search for something, like rspec
+    %p Hints:
+    %ul
+      %li doesn't work for user names
+      %li doesn't work without trying to find a repo (no bare w:3 type searches)
+
+    %h3 Discovery
+    %p If you're trying to find something and you're not quite sure what it is you have a few options.
+    %ul
+      %li Search Rails and Search Ruby (curated Google custom search)
+      %li Github's Native Explore (though admittedly you need a pretty good idea of what you want)
+      %li Ruby Toolbox
+  %br
+
+- content_for :sidebar do
+  = render :partial => "sidebar"

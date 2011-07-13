@@ -38,14 +38,17 @@ class Github
       end
     end
 
-    def repositories(terms, options = {})
+    def repositories(terms, query_options = {})
       dc = Dalli::Client.new
       options = {
         :watchers  => 6,
         :forks     => 2,
         :pushed_at => 26,
-        :sort => :score
-      }.merge!(options)
+        :sort => :score,
+        :force => false
+      }
+
+      options.merge!(query_options) if query_options
 
       all_results = []
       search_terms = terms.split(/\s+/)
